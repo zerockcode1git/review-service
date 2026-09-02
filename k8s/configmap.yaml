@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+ name: review-service-config
+ namespace: review-service
+data:
+ SERVER_PORT: "8083"
+ SPRING_APPLICATION_NAME: "review-service"
+ SERVICES_PRODUCT_URL: "http://product-service.product-service.svc.cluster.local:8081"

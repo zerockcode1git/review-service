@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: review-service
+  
+  cloud:
+   openfeign:
+     circuitbreaker:
+       enabled: true
+     client:
+       config:
+         # 전체 Feign 클라이언트 기본값
+         default:
+           connectTimeout: 10000
+           readTimeout: 12000
+
+
+         # product-service 이름 지정 (default보다 우선)
+         product-service:
+           connectTimeout: 3000
+           readTimeout: 3500
+
+
+server:
+  port: 8083
+
+
+service:
+  product-service:
+    url: ${SERVICES_PRODUCT_URL}
+
+resilience4j:
+ timelimiter:
+   configs:
+     default:
+       timeoutDuration: 3s #OpenFeign(product-service readTimeout 4s)보다 작은 값
+
+
+
+ circuitbreaker:
+   configs:
+     default:
+       slidingWindowType: COUNT_BASED
+       slidingWindowSize: 10
+       minimumNumberOfCalls: 10
+       failureRateThreshold: 50 # 10번 중 5번 이상 실패 시 open
+       waitDurationInOpenState: 180s
+       permittedNumberOfCallsInHalfOpenState: 3
+
+management:
+ endpoints:
+   web:
+     exposure:
+       include: health, circuitbreakers, circuitbreakerevents
+ health:
+   circuitbreakers:
+     enabled: true
