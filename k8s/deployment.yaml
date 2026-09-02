@@ -27,7 +27,7 @@ spec:
    spec:
      containers:
        - name: review-service
-         image: zerockcode1/review-service:sha-5f335b1
+         image: zerockcode1/review-service:sha-dcaeff7
          imagePullPolicy: Always
          ports:
            - containerPort: 8083
